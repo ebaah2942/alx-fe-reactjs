@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useRecipeStore } from "./recipeStore";
+import SearchBar from "./SearchBar";
 
 
 export default function RecipeList() {
@@ -8,6 +9,7 @@ export default function RecipeList() {
   return (
     <div>
       <h2>Recipes</h2>
+       <SearchBar />
       {recipes.length === 0 ? (
         <p>No recipes yet. Add one!</p>
       ) : (
