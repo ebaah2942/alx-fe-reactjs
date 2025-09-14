@@ -29,6 +29,7 @@ export default function RecipeDetails() {
           Edit
         </Link>
         <DeleteRecipeButton id={recipe.id} onDeleted={() => navigate("/")} />
+        <FavoriteButton recipeId={recipe.id} />
       </div>
 
       <div style={{ marginTop: 12 }}>
@@ -37,3 +38,23 @@ export default function RecipeDetails() {
     </div>
   );
 }
+
+export default function FavoriteButton({ recipeId }) {
+  const { favorites, addFavorite, removeFavorite } = useRecipeStore();
+  const isFavorite = favorites.includes(recipeId);
+
+  const toggleFavorite = () => {
+    if (isFavorite) {
+      removeFavorite(recipeId);
+    } else {
+      addFavorite(recipeId);
+    }
+  };
+
+  return (
+    <button onClick={toggleFavorite}>
+      {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+    </button>
+  );
+}
+
