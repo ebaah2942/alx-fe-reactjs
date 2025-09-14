@@ -1,14 +1,13 @@
 import { useRecipeStore } from "./recipeStore";
 
-export default function DeleteRecipeButton({ id, onDeleted }) {
-  const deleteRecipe = useRecipeStore((s) => s.deleteRecipe);
+export default function DeleteRecipeButton({ recipeId }) {
+  const { recipes, setRecipes } = useRecipeStore();
+  const navigate = useNavigate(); // ✅ navigation after delete
 
   const handleDelete = () => {
-    // cheap confirmation — replace with a custom modal if you want
-    if (!window.confirm("Delete this recipe?")) return;
-    deleteRecipe(id);
-    if (onDeleted) onDeleted();
+    setRecipes(recipes.filter((recipe) => recipe.id !== recipeId));
+    navigate("/"); // ✅ redirect to home after delete
   };
 
-  return <button onClick={handleDelete}>Delete</button>;
+  return <button onClick={handleDelete}>Delete Recipe</button>;
 }
