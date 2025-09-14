@@ -3,8 +3,7 @@ import { useRecipeStore } from "./recipeStore";
 export default function DeleteRecipeButton({ id, onDeleted }) {
   const deleteRecipe = useRecipeStore((s) => s.deleteRecipe);
 
-  const handleDelete = (event) => {
-    event.preventDefault();
+  const handleDelete = () => {
     // cheap confirmation — replace with a custom modal if you want
     if (!window.confirm("Delete this recipe?")) return;
     deleteRecipe(id);
