@@ -1,26 +1,31 @@
 import axios from "axios";
 
-import axios from "axios";
-
-const BASE_URL = "https://api.github.com/users";
-
-// 🔑 Load GitHub API key from .env
+const BASE_URL = "https://api.github.com/search/users";
 const API_KEY = import.meta.env.VITE_APP_GITHUB_API_KEY;
 
 /**
- * Fetch user data from GitHub
- * @param {string} username - GitHub username
- * @returns {Promise<Object>}
+ * Advanced GitHub User Search
+ * @param {Object} params - search parameters
+ * @param {string} params.username
+ * @param {string} params.location
+ * @param {number} params.minRepos
+ * @param {number} params.page
  */
-export const fetchUserData = async (username) => {
+export const fetchAdvancedUsers = async ({ username, location, minRepos, page = 1 }) => {
   try {
-    const response = await axios.get(`${BASE_URL}/${username}`, {
-      headers: API_KEY
-        ? { Authorization: `token ${API_KEY}` }
-        : {} // fallback to no auth if no key
+    // Build query string
+    let query = username ? `${username} in:login` : "";
+    if (location) query += ` location:${location}`;
+    if (minRepos) query += ` repos:>=${minRepos}`;
+
+    const response = await axios.get(BASE_URL, {
+      params: { q: query.trim(), page, per_page: 10 },
+      headers: API_KEY ? { Authorization: `token ${API_KEY}` } : {}
     });
-    return response.data;
+
+    return response.data; // includes { items: [], total_count: number }
   } catch (error) {
-    throw new Error("Looks like we cant find the user");
+    throw new Error("Failed to fetch users");
   }
 };
+
